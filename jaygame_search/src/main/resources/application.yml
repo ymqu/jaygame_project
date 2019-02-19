@@ -1,0 +1,10 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: jaygame-search
+
+
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.201.135:9300

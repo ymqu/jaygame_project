@@ -1,0 +1,66 @@
+package com.jaygame.base.service;
+
+import JwtUtil.JwtUtil;
+import com.jaygame.base.dao.UserDao;
+import com.jaygame.base.pojo.User;
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+@Transactional
+public class UserService {
+
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private HttpServletRequest request;  //get user authorization from client.
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    //token authorization, admin user
+    public Map<String, Object> userToken(){
+        Map<String, Object> map = new HashMap<>();
+        String header = request.getHeader("Authorization");   //user will pass format;" Authorization; Bearer 'token'";
+        if(header == null || "".equals(header) || !header.startsWith("Bearer ")){
+            throw new RuntimeException("not enough right");
+        }
+        String token = header.substring(7);
+        try{
+            Claims claims = jwtUtil.parseJWT(token);
+            String roles = (String)claims.get("roles");
+            String userId = claims.getId();
+            map.put("userId", userId);
+            map.put("roles", roles);
+            return map;
+           // if(roles==null || !roles.equals("admin")) return 1;
+        }catch (Exception e) {
+            throw new RuntimeException("not enough right");
+        }
+    }
+
+
+    public User userProfile(){
+        Map<String,Object> map = userToken();
+        String userId = (String)map.get("userId");
+        User user = userDao.getOne(Integer.parseInt(userId));
+       // User byUser_id = userDao.findByUser_id(Integer.parseInt(userId));
+        return user;
+    }
+
+    public User login(User user){
+        User userLogin =   userDao.findByUsername(user.getUsername());
+
+        if(userLogin !=null){
+            return userDao.findByPassword(user.getPassword());
+        }
+        return null;
+    }
+
+
+}
