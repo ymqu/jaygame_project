@@ -1,6 +1,7 @@
 package com.jaygame.base.controller;
 
 import com.jaygame.base.pojo.Comments;
+import com.jaygame.base.pojo.User;
 import com.jaygame.base.service.CommentService;
 import entity.PageResult;
 import entity.Result;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @GetMapping(value="/{id}")
     public Result findById(@PathVariable String id){
@@ -37,9 +42,19 @@ public class CommentController {
 
     @PostMapping("/postcomment/{gameId}")
     public Result save(@PathVariable String gameId, @RequestBody Comments comments){
-        comments.setGameId(gameId);
-        commentService.save(comments);
-        return new Result(true, StatusCode.OK, "save success!");
+        String token = (String) request.getAttribute("claims_user");
+        if(token ==null || "".equals(token)) throw new RuntimeException("please login first");
+        else {
+            String claims_user_id = (String) request.getAttribute("claims_user_id");
+            String claims_user_name = (String) request.getAttribute("claims_user_name");
+
+            comments.setGameId(gameId);
+            comments.setUserid(claims_user_id);
+            comments.setNickname(claims_user_name);
+            System.out.printf("thumpup", comments.getThumbup());
+            commentService.save(comments);
+            return new Result(true, StatusCode.OK, "save success!",claims_user_name);
+        }
     }
 
 

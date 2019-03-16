@@ -31,11 +31,17 @@ public class UserController {
             if (user == null) {
                 return new Result(false, StatusCode.ERROR, "username or password error", null);
             }
-            //create jwt
-            String token = jwtUtil.createJWT(user.getUser_id().toString(), user.getUsername(), "common");
+
+            Integer usr_privacy_id = user.getUsr_privacy_id();
+            String role = "user";
+            if(usr_privacy_id.equals(2)){
+                role = "admin";
+            }
+        //create jwt
+        String token = jwtUtil.createJWT(user.getUser_id().toString(), user.getUsername(), role);
             Map<String, Object>  map = new HashMap<>();
             map.put("token",token);
-            map.put("role", "common");
+            map.put("role", role);
             map.put("state", user.getState());
             map.put("country", user.getCountry());
             return new Result(true, StatusCode.OK, "username and password correct", map);

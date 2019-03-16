@@ -1,0 +1,23 @@
+server:
+  port: 9011
+
+spring:
+  application:
+    name: jaygame-manager
+
+jwt:
+  config:
+    key: jaygame
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka/
+  instance:
+    prefer-ip-address: true
+
+zuul:
+  routes:
+    jaygame-base: #activity
+      path: /base/**      #URL rule
+      serviceId: jaygame-base  #Euraka register center service id

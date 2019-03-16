@@ -26,6 +26,7 @@ public class GameController {
     @GetMapping(value="/detail")
     public Result getGameDetail(@RequestParam("game_id") String gameId){
         Integer id = Integer.parseInt(gameId);
+        System.out.println("gameid" + id);
         Game gameDetail = gameService.getGameDetail(id);
         System.out.println(gameDetail.toString());
         return new Result(true, StatusCode.OK, "game detail",gameDetail);

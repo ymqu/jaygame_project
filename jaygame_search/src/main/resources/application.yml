@@ -3,8 +3,13 @@ server:
 spring:
   application:
     name: jaygame-search
-
-
   data:
     elasticsearch:
-      cluster-nodes: 192.168.201.135:9300
+      cluster-nodes: 192.168.201.145:9300
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka/
+  instance:
+    prefer-ip-address: true

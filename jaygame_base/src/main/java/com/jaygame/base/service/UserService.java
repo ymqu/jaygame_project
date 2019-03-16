@@ -20,36 +20,50 @@ public class UserService {
     private UserDao userDao;
     @Autowired
     private HttpServletRequest request;  //get user authorization from client.
-    @Autowired
-    private JwtUtil jwtUtil;
+//    @Autowired
+//    private JwtUtil jwtUtil;
 
     //token authorization, admin user
-    public Map<String, Object> userToken(){
-        Map<String, Object> map = new HashMap<>();
-        String header = request.getHeader("Authorization");   //user will pass format;" Authorization; Bearer 'token'";
-        if(header == null || "".equals(header) || !header.startsWith("Bearer ")){
-            throw new RuntimeException("not enough right");
-        }
-        String token = header.substring(7);
-        try{
-            Claims claims = jwtUtil.parseJWT(token);
-            String roles = (String)claims.get("roles");
-            String userId = claims.getId();
-            map.put("userId", userId);
-            map.put("roles", roles);
-            return map;
-           // if(roles==null || !roles.equals("admin")) return 1;
-        }catch (Exception e) {
-            throw new RuntimeException("not enough right");
-        }
-    }
+//    public Map<String, Object> userToken(){
+//        Map<String, Object> map = new HashMap<>();
+//        String header = request.getHeader("Authorization");   //user will pass format;" Authorization; Bearer 'token'";
+//        if(header == null || "".equals(header) || !header.startsWith("Bearer ")){
+//            throw new RuntimeException("not enough right");
+//        }
+//        String token = header.substring(7);
+//        try{
+//            Claims claims = jwtUtil.parseJWT(token);
+//            String roles = (String)claims.get("roles");
+//            String userId = claims.getId();
+//            map.put("userId", userId);
+//            map.put("roles", roles);
+//            return map;
+//           // if(roles==null || !roles.equals("admin")) return 1;
+//        }catch (Exception e) {
+//            throw new RuntimeException("not enough right");
+//        }
+//    }
 
 
+    /**
+     * 1.parse request attributes passed by interceptor
+     * @return  User
+     */
     public User userProfile(){
-        Map<String,Object> map = userToken();
-        String userId = (String)map.get("userId");
-        User user = userDao.getOne(Integer.parseInt(userId));
+//        Map<String,Object> map = userToken();
+//        String userId = (String)map.get("userId");
+
+        User user = null;
+        String token = (String) request.getAttribute("claims_user");
+        if(token ==null || "".equals(token)) throw new RuntimeException("please login first");
+        else{
+            String claims_user_id = (String) request.getAttribute("claims_user_id");
+            user = userDao.getOne(Integer.parseInt(claims_user_id));
+
+            System.out.println(claims_user_id + " " + user);
+        }
        // User byUser_id = userDao.findByUser_id(Integer.parseInt(userId));
+
         return user;
     }
 
