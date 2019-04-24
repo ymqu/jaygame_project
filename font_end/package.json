@@ -1,0 +1,45 @@
+{
+    "name": "webpack",
+    "version": "1.0.0",
+    "description": "this is beginning of webpack",
+    "main": "index.js",
+    "dependencies": {
+        "bootstrap": "^4.2.1",
+        "jquery": "^3.3.1",
+        "mint-ui": "^2.2.13",
+        "moment": "^2.24.0",
+        "vue": "^2.5.21",
+        "vue-resource": "^1.5.1",
+        "vue-router": "^3.0.2",
+        "vue-session": "^1.0.0",
+        "vue-star-rating": "^1.6.1",
+        "webpack": "^4.28.1"
+    },
+    "devDependencies": {
+        "css-loader": "^2.1.0",
+        "file-loader": "^3.0.1",
+        "html-webpack-plugin": "^3.2.0",
+        "i": "^0.3.6",
+        "less": "^3.9.0",
+        "less-loader": "^4.1.0",
+        "node-sass": "^4.11.0",
+        "npm": "^6.6.0-next.1",
+        "popper.js": "^1.14.6",
+        "sass": "^1.15.3",
+        "sass-loader": "^7.1.0",
+        "style-loader": "^0.23.1",
+        "url-loader": "^1.1.2",
+        "vue-load": "^1.0.2",
+        "vue-loader": "^14.2.2",
+        "vue-template-compiler": "^2.5.21",
+        "webpack-cli": "^3.2.1",
+        "webpack-dev-server": "^3.1.14"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "webpack-dev-server --open --port 3000  --hot",
+        "build": "webpack --config ./webpack.config.js"
+    },
+    "author": "yumei qu",
+    "license": "ISC"
+}
